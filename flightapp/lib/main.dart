@@ -4,17 +4,9 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flightapp/result.dart';
 import 'package:flutter/material.dart';
 
-final today = DateUtils.dateOnly(DateTime.now());
-
 void main() {
   runApp(
     MaterialApp(
-      //theme: new ThemeData(
-      //primarySwatch: Colors.blue,
-      //primaryColor: const Color(0xFF2196f3),
-      //accentColor: const Color(0xFF2196f3),
-      //canvasColor: const Color(0xFFfafafa),
-      //),
       home: HomePage(),
     ),
   );
@@ -47,26 +39,28 @@ class _HomePageState extends State<HomePage> {
 
   // Create a function to navigate to the result page and pass data as arguments
   void _navigateToResultPage() {
+    FlightSearchData searchData = FlightSearchData(
+      departure: _departureController.text,
+      arrival: _arrivalController.text,
+      adultCount: _adultCountController.text,
+      kidCount: _kidCountController.text,
+      babyCount: _babyCountController.text,
+      isEconomicClass: _isSelectedClass[0],
+      isPremiumEconomicClass: _isSelectedClass[1],
+      isBusinessClass: _isSelectedClass[2],
+      isFirstClass: _isSelectedClass[3],
+      selectedDate: _isSelected[0]
+          ? _singleDatePickerValueWithDefaultValue[0]
+          : null,
+      selectedRange: _isSelected[1]
+          ? _rangeDatePickerWithActionButtonsWithValue
+          : [null, null],
+    );
+
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ResultPage(
-          departure: _departureController.text,
-          arrival: _arrivalController.text,
-          adultCount: _adultCountController.text,
-          kidCount: _kidCountController.text,
-          babyCount: _babyCountController.text,
-          isEconomicClass: _isSelectedClass[0],
-          isPremiumEconomicClass: _isSelectedClass[1],
-          isBusinessClass: _isSelectedClass[2],
-          isFirstClass: _isSelectedClass[3],
-          selectedDate: _isSelected[0]
-              ? _singleDatePickerValueWithDefaultValue[0]
-              : null,
-          selectedRange: _isSelected[1]
-              ? _rangeDatePickerWithActionButtonsWithValue
-              : [null, null],
-        ),
+        builder: (context) => ResultPage(searchData: searchData),
       ),
     );
   }
@@ -74,12 +68,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar
       appBar: AppBar(
         title: const Text("Flight"),
         actions: [],
       ),
-      //body
       body: Column(
         children: [
           Row(
@@ -200,7 +192,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.only(top: 0.0),
+                    padding: const EdgeInsets.only(top: 40.0),
                     child: CalendarDatePicker2(
                       config: CalendarDatePicker2Config(),
                       value: _singleDatePickerValueWithDefaultValue,
@@ -214,7 +206,7 @@ class _HomePageState extends State<HomePage> {
           if (_isSelected[1])
             Expanded(
               child: Padding(
-                padding: EdgeInsets.only(top: 0),
+                padding: EdgeInsets.only(top: 30.0),
                 child: CalendarDatePicker2(
                   config: CalendarDatePicker2Config(
                     calendarType: CalendarDatePicker2Type.range,
@@ -229,7 +221,7 @@ class _HomePageState extends State<HomePage> {
             style: TextButton.styleFrom(
               primary: Colors.blue,
             ),
-            onPressed: _navigateToResultPage, // Call the navigation function when the button is pressed
+            onPressed: _navigateToResultPage,
             child: Text('Search'),
           ),
         ],
