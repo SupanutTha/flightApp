@@ -1,5 +1,7 @@
 // main.dart
 
+// ignore_for_file: sort_child_properties_last, prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flightapp/result.dart';
 import 'package:flutter/material.dart';
@@ -114,6 +116,7 @@ class _HomePageState extends State<HomePage> {
                     controller: _departureController, // Use the controller for Departure
                     decoration: InputDecoration(labelText: "Departure"),
                     keyboardType: TextInputType.text,
+                    
                   ),
                 ),
                 Padding(
@@ -124,51 +127,92 @@ class _HomePageState extends State<HomePage> {
                     keyboardType: TextInputType.text,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _adultCountController, // Use the controller for Adult Count
-                    decoration:
-                        InputDecoration(labelText: "Adult (more than 11 years)"),
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _kidCountController, // Use the controller for Kid Count
-                    decoration: InputDecoration(labelText: "Kid (2-11 years)"),
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _babyCountController, // Use the controller for Baby Count
-                    decoration:
-                        InputDecoration(labelText: "Baby (below 2 years)"),
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: TextField(
+                //     controller: _adultCountController, // Use the controller for Adult Count
+                //     decoration:
+                //         InputDecoration(labelText: "Adult (more than 11 years)"),
+                //     keyboardType: TextInputType.text,
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: TextField(
+                //     controller: _kidCountController, // Use the controller for Kid Count
+                //     decoration: InputDecoration(labelText: "Kid (2-11 years)"),
+                //     keyboardType: TextInputType.text,
+                //   ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: TextField(
+                //     controller: _babyCountController, // Use the controller for Baby Count
+                //     decoration:
+                //         InputDecoration(labelText: "Baby (below 2 years)"),
+                //     keyboardType: TextInputType.text,
+                //   ),
+                // ),
+                Row(
+  children: [
+    Expanded(
+      flex: 1, // Custom flex value for the first TextField
+      child: TextField(
+        controller: _adultCountController,
+        decoration: InputDecoration(labelText: "Adult (more than 11 years)"),
+        keyboardType: TextInputType.text,
+      ),
+    ),
+    Expanded(
+      flex: 1, // Custom flex value for the second TextField
+      child: TextField(
+        controller: _kidCountController,
+        decoration: InputDecoration(labelText: "Kid (2-11 years)"),
+        keyboardType: TextInputType.text,
+      ),
+    ),
+    Expanded(
+      flex: 1, // Custom flex value for the third TextField
+      child: TextField(
+        controller: _babyCountController,
+        decoration: InputDecoration(labelText: "Baby (below 2 years)"),
+        keyboardType: TextInputType.text,
+      ),
+    ),
+  ],
+),
+
                 ToggleButtons(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Economic Class'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Premiun Economic Class'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Business Class'),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('First Class'),
-                    )
-                  ],
+    Expanded(
+      flex: 1, // Custom flex value for the first Text widget
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text('Economic Class'),
+      ),
+    ),
+    Expanded(
+      flex: 1, // Custom flex value for the second Text widget
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text('Premium Economic Class'),
+      ),
+    ),
+    Expanded(
+      flex: 1, // Custom flex value for the third Text widget
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text('Business Class'),
+      ),
+    ),
+    Expanded(
+      flex: 1, // Custom flex value for the fourth Text widget
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text('First Class'),
+      ),
+    ),
+  ],
                   isSelected: _isSelectedClass,
                   onPressed: (index) {
                     setState(() {
@@ -189,32 +233,37 @@ class _HomePageState extends State<HomePage> {
           ),
           if (_isSelected[0])
             Expanded(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 40.0),
-                    child: CalendarDatePicker2(
-                      config: CalendarDatePicker2Config(),
-                      value: _singleDatePickerValueWithDefaultValue,
-                      onValueChanged: (dates) =>
-                          _singleDatePickerValueWithDefaultValue = dates,
-                    ),
-                  ),
-                ],
-              ),
-            ),
+  child: Column(
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(top: 0),
+        child: CalendarDatePicker2(
+          config: CalendarDatePicker2Config(),
+          value: _singleDatePickerValueWithDefaultValue,
+          onValueChanged: (dates) =>
+              _singleDatePickerValueWithDefaultValue = dates,
+        ),
+      ),
+    ],
+  ),
+),
+
           if (_isSelected[1])
             Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(top: 30.0),
-                child: CalendarDatePicker2(
-                  config: CalendarDatePicker2Config(
-                    calendarType: CalendarDatePicker2Type.range,
-                  ),
-                  value: _rangeDatePickerWithActionButtonsWithValue,
-                  onValueChanged: (dates) =>
-                      _rangeDatePickerWithActionButtonsWithValue = dates,
-                ),
+                child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return Padding(
+                    padding: EdgeInsets.only(top:0),
+                    child: CalendarDatePicker2(
+                      config: CalendarDatePicker2Config(
+                        calendarType: CalendarDatePicker2Type.range,
+                      ),
+                      value: _rangeDatePickerWithActionButtonsWithValue,
+                      onValueChanged: (dates) =>
+                          _rangeDatePickerWithActionButtonsWithValue = dates,
+                    ),
+                  );
+                }
               ),
             ),
           TextButton(
