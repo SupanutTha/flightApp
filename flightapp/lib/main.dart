@@ -41,35 +41,47 @@ class _HomePageState extends State<HomePage> {
 
   // Create a function to navigate to the result page and pass data as arguments
   void _navigateToResultPage() {
-    FlightSearchData searchData = FlightSearchData(
-      departure: _departureController.text,
-      arrival: _arrivalController.text,
-      adultCount: _adultCountController.text,
-      kidCount: _kidCountController.text,
-      babyCount: _babyCountController.text,
-      isEconomicClass: _isSelectedClass[0],
-      isPremiumEconomicClass: _isSelectedClass[1],
-      isBusinessClass: _isSelectedClass[2],
-      isFirstClass: _isSelectedClass[3],
-      selectedDate: _isSelected[0]
-          ? _singleDatePickerValueWithDefaultValue[0]
-          : null,
-      selectedRange: _isSelected[1]
-          ? _rangeDatePickerWithActionButtonsWithValue
-          : [null, null],
-    );
+  // Use the null-aware operator ?? to provide default values for null fields
+  String departure = _departureController.text ?? '';
+  String arrival = _arrivalController.text ?? '';
+  String adultCount = _adultCountController.text ?? '1';
+  String kidCount = _kidCountController.text ?? '0';
+  String babyCount = _babyCountController.text ?? '0';
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ResultPage(searchData: searchData),
-      ),
-    );
-  }
+  FlightSearchData searchData = FlightSearchData(
+    departure: departure,
+    arrival: arrival,
+    adultCount: adultCount,
+    kidCount: kidCount,
+    babyCount: babyCount,
+    isEconomicClass: _isSelectedClass[0],
+    isPremiumEconomicClass: _isSelectedClass[1],
+    isBusinessClass: _isSelectedClass[2],
+    isFirstClass: _isSelectedClass[3],
+    selectedDate: _isSelected[0]
+        ? _singleDatePickerValueWithDefaultValue[0]
+        : null,
+    selectedRange: _isSelected[1]
+        ? _rangeDatePickerWithActionButtonsWithValue
+        : [null, null],
+  );
+
+
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => ResultPage(searchData: searchData),
+    ),
+  );
+}
+
+
+  
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       appBar: AppBar(
         title: const Text("Flight"),
         actions: [],
@@ -86,7 +98,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('Go-Back Flight'),
+                    child: Text('Round Flight'),
                   )
                 ],
                 isSelected: _isSelected,
@@ -127,32 +139,8 @@ class _HomePageState extends State<HomePage> {
                     keyboardType: TextInputType.text,
                   ),
                 ),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: TextField(
-                //     controller: _adultCountController, // Use the controller for Adult Count
-                //     decoration:
-                //         InputDecoration(labelText: "Adult (more than 11 years)"),
-                //     keyboardType: TextInputType.text,
-                //   ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: TextField(
-                //     controller: _kidCountController, // Use the controller for Kid Count
-                //     decoration: InputDecoration(labelText: "Kid (2-11 years)"),
-                //     keyboardType: TextInputType.text,
-                //   ),
-                // ),
-                // Padding(
-                //   padding: const EdgeInsets.all(8.0),
-                //   child: TextField(
-                //     controller: _babyCountController, // Use the controller for Baby Count
-                //     decoration:
-                //         InputDecoration(labelText: "Baby (below 2 years)"),
-                //     keyboardType: TextInputType.text,
-                //   ),
-                // ),
+
+
                 Row(
   children: [
     Expanded(
