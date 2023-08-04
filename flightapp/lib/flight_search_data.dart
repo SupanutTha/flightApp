@@ -26,4 +26,9 @@ class FlightSearchData {
     required this.isBusinessClass,
     required this.isFirstClass,
   });
+
+    DateTime? getEffectiveDate() {
+    return selectedDate ?? selectedRange.first;
+  }
 }
+
