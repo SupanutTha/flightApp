@@ -1,5 +1,3 @@
-// flight_search_data.dart
-
 class FlightSearchData {
   final String departure;
   final String arrival;
@@ -26,9 +24,12 @@ class FlightSearchData {
     required this.isBusinessClass,
     required this.isFirstClass,
   });
-
-    DateTime? getEffectiveDate() {
+  
+  DateTime? getEffectiveDate() {
     return selectedDate ?? selectedRange.first;
   }
-}
 
+  DateTime? getEffectiveDateReturn() {
+    return selectedDate ?? selectedRange.last;
+  }
+}

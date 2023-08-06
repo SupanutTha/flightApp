@@ -6,6 +6,8 @@ import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flightapp/result.dart';
 import 'package:flutter/material.dart';
 
+import 'flight_search_data.dart';
+
 void main() {
   runApp(
     MaterialApp(
@@ -22,26 +24,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<bool> _isSelected = [true, false];
-  List<bool> _isSelectedClass = [true, false, false, false];
-  List<DateTime?> _singleDatePickerValueWithDefaultValue = [
+  List<bool> _isSelected = [true, false]; //for one way - round button default is one-way
+  List<bool> _isSelectedClass = [true, false, false, false]; //for class selected eco/bus/first/.. default is eco
+  List<DateTime?> _singleDatePickerValueWithDefaultValue = [ // calendar for one way trip
     DateTime.now(),
   ];
-  List<DateTime?> _rangeDatePickerWithActionButtonsWithValue = [
+  List<DateTime?> _rangeDatePickerWithActionButtonsWithValue = [ // calendar for round trip
     DateTime.now(),
     DateTime.now().add(const Duration(days: 0)),
   ];
 
-  // Define the controllers
   TextEditingController _departureController = TextEditingController();
   TextEditingController _arrivalController = TextEditingController();
   TextEditingController _adultCountController = TextEditingController(text: '1');
   TextEditingController _kidCountController = TextEditingController(text: '0');
   TextEditingController _babyCountController = TextEditingController(text: '0');
 
-  // Create a function to navigate to the result page and pass data as arguments
+
   void _navigateToResultPage() {
-  // Use the null-aware operator ?? to provide default values for null fields
+  // ?? = defualt value
   String departure = _departureController.text ?? '';
   String arrival = _arrivalController.text ?? '';
   String adultCount = _adultCountController.text ?? '1';
@@ -58,12 +59,14 @@ class _HomePageState extends State<HomePage> {
     isPremiumEconomicClass: _isSelectedClass[1],
     isBusinessClass: _isSelectedClass[2],
     isFirstClass: _isSelectedClass[3],
+    // if true = ?
+    // false = :
     selectedDate: _isSelected[0]
         ? _singleDatePickerValueWithDefaultValue[0]
         : null,
     selectedRange: _isSelected[1]
         ? _rangeDatePickerWithActionButtonsWithValue
-        : [null, null],
+        : [null, null],//first , last
   );
 
 
@@ -74,9 +77,6 @@ class _HomePageState extends State<HomePage> {
     ),
   );
 }
-
-
-  
 
   @override
   Widget build(BuildContext context) {

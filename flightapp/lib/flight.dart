@@ -1,5 +1,3 @@
-// flight.dart
-
 class Flight {
   final String flightNumber;
   final String departure;
@@ -23,14 +21,27 @@ class Flight {
 
   factory Flight.fromJson(Map<String, dynamic> json) {
     return Flight(
-      flightNumber: json['flightNumber'],
-      departure: json['departure'],
-      arrival: json['arrival'],
-      departureTime: json['departureTime'],
-      arrivalTime: json['arrivalTime'],
-      airline: json['airline'],
-      classType: json['classType'],
-      price: json['price'].toDouble(),
+      flightNumber: json['id'],
+      departure: json['itineraries'][0]['segments'][0]['departure']['iataCode'],
+      arrival: json['itineraries'][0]['segments'][1]['arrival']['iataCode'],
+      departureTime: json['itineraries'][0]['segments'][0]['departure']['at'],
+      arrivalTime: json['itineraries'][0]['segments'][1]['arrival']['at'],
+      airline: json['itineraries'][0]['segments'][0]['carrierCode'],
+      classType: json['travelerPricings'][0]['fareDetailsBySegment'][0]['cabin'],
+      price: double.parse(json['price']['total']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'flightNumber': flightNumber,
+      'departure': departure,
+      'arrival': arrival,
+      'departureTime': departureTime,
+      'arrivalTime': arrivalTime,
+      'airline': airline,
+      'classType': classType,
+      'price': price,
+    };
   }
 }
