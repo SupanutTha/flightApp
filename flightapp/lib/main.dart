@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
   TextEditingController _babyCountController = TextEditingController(text: '0');
 
 
-  void _navigateToResultPage() {
+  void _navigateToResultPage() { // send data to class flight_search_data
   // ?? = defualt value
   String departure = _departureController.text ?? '';
   String arrival = _arrivalController.text ?? '';
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   String kidCount = _kidCountController.text ?? '0';
   String babyCount = _babyCountController.text ?? '0';
 
-  FlightSearchData searchData = FlightSearchData(
+  FlightSearchData searchData = FlightSearchData( // collect data  in flightSearchData
     departure: departure,
     arrival: arrival,
     adultCount: adultCount,
@@ -62,10 +62,10 @@ class _HomePageState extends State<HomePage> {
     // if true = ?
     // false = :
     selectedDate: _isSelected[0]
-        ? _singleDatePickerValueWithDefaultValue[0]
+        ? _singleDatePickerValueWithDefaultValue[0] // pick one day
         : null,
     selectedRange: _isSelected[1]
-        ? _rangeDatePickerWithActionButtonsWithValue
+        ? _rangeDatePickerWithActionButtonsWithValue // pick range of days
         : [null, null],//first , last
   );
 
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => ResultPage(searchData: searchData),
+      builder: (context) => ResultPage(searchData: searchData), // send data to result page
     ),
   );
 }
@@ -81,13 +81,35 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    
       
-      appBar: AppBar(
-        title: const Text("Flight"),
+      appBar: AppBar( // header
+        title:  Image(
+          image:AssetImage("../images/plane.png"), // app icon
+          height: 40,
+          ),
         actions: [],
       ),
-      body: Column(
-        children: [
+      drawer : Drawer( ///drawer cant do any thing
+          child: ListView(
+              padding: EdgeInsets.zero,
+          children: [       
+            ListTile(
+              title: Text("main menu"),
+              onTap: () { // can only click 
+              },
+            ),
+            ListTile(
+              title: Text("setting"), // yeah! this too
+              onTap: () {
+                
+              },
+            )
+          ],
+          ),
+      ),
+      body: Column( //select trip one way/round
+        children: [ // they is a select one button 
           Row(
             children: [
               ToggleButtons(
@@ -103,8 +125,8 @@ class _HomePageState extends State<HomePage> {
                 ],
                 isSelected: _isSelected,
                 onPressed: (index) {
-                  setState(() {
-                    for (int buttonIndex = 0;
+                  setState(() { // set the trip by set true to the list<bool> index . index[0] = one way, index[1] = round
+                    for (int buttonIndex = 0; // loop check that what index is true
                         buttonIndex < _isSelected.length;
                         buttonIndex++) {
                       if (buttonIndex == index) {
@@ -118,13 +140,13 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-          Expanded(
+          Expanded( //detail of flight
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(children: [
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextField(
+                  child: TextField( // only upper case and airport short name
                     controller: _departureController, // Use the controller for Departure
                     decoration: InputDecoration(labelText: "Departure"),
                     keyboardType: TextInputType.text,
@@ -144,7 +166,7 @@ class _HomePageState extends State<HomePage> {
                 Row(
   children: [
     Expanded(
-      flex: 1, // Custom flex value for the first TextField
+      flex: 1,
       child: TextField(
         controller: _adultCountController,
         decoration: InputDecoration(labelText: "Adult (more than 11 years)"),
@@ -152,16 +174,16 @@ class _HomePageState extends State<HomePage> {
       ),
     ),
     Expanded(
-      flex: 1, // Custom flex value for the second TextField
-      child: TextField(
+      flex: 1, 
+      child: TextField( //mock up cant search
         controller: _kidCountController,
         decoration: InputDecoration(labelText: "Kid (2-11 years)"),
         keyboardType: TextInputType.text,
       ),
     ),
     Expanded(
-      flex: 1, // Custom flex value for the third TextField
-      child: TextField(
+      flex: 1,  
+      child: TextField( //mock up cant search
         controller: _babyCountController,
         decoration: InputDecoration(labelText: "Baby (below 2 years)"),
         keyboardType: TextInputType.text,
@@ -170,31 +192,31 @@ class _HomePageState extends State<HomePage> {
   ],
 ),
 
-                ToggleButtons(
+                ToggleButtons( //select class eco/ flight / business  premium(mock up)
                   children: [
     Expanded(
-      flex: 1, // Custom flex value for the first Text widget
+      flex: 1,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text('Economic Class'),
       ),
     ),
     Expanded(
-      flex: 1, // Custom flex value for the second Text widget
+      flex: 1, 
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text('Premium Economic Class'),
       ),
     ),
     Expanded(
-      flex: 1, // Custom flex value for the third Text widget
+      flex: 1, 
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text('Business Class'),
       ),
     ),
     Expanded(
-      flex: 1, // Custom flex value for the fourth Text widget
+      flex: 1,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text('First Class'),
@@ -203,7 +225,7 @@ class _HomePageState extends State<HomePage> {
   ],
                   isSelected: _isSelectedClass,
                   onPressed: (index) {
-                    setState(() {
+                    setState(() { // use same method as trip mode selected
                       for (int buttonIndex = 0;
                           buttonIndex < _isSelectedClass.length;
                           buttonIndex++) {
@@ -221,7 +243,7 @@ class _HomePageState extends State<HomePage> {
           ),
           if (_isSelected[0])
             Expanded(
-  child: Column(
+  child: Column( // calender one-way 
     children: [
       Padding(
         padding: const EdgeInsets.only(top: 0),
@@ -242,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, constraints) {
                   return Padding(
                     padding: EdgeInsets.only(top:0),
-                    child: CalendarDatePicker2(
+                    child: CalendarDatePicker2( // calendar round trip
                       config: CalendarDatePicker2Config(
                         calendarType: CalendarDatePicker2Type.range,
                       ),
@@ -254,13 +276,28 @@ class _HomePageState extends State<HomePage> {
                 }
               ),
             ),
-          TextButton(
-            style: TextButton.styleFrom(
-              primary: Colors.blue,
-            ),
+          FloatingActionButton( //floating button for search data
             onPressed: _navigateToResultPage,
-            child: Text('Search'),
-          ),
+            backgroundColor: Colors.blue,
+            child: const Icon(Icons.search),
+            ),
+
+          BottomNavigationBar( // bottun Nav bar cant do any thing just show (can click)
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: 'search'
+                ),
+                BottomNavigationBarItem(
+                icon: Icon(Icons.home),
+                label: 'Home'
+                ),
+                BottomNavigationBarItem(
+                icon: Icon(Icons.airplane_ticket),
+                label: 'ticket'
+                )
+            ]
+            )
         ],
       ),
     );
