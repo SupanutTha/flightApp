@@ -25,7 +25,7 @@ class FlightSearchData {
     required this.isFirstClass,
   });
   
-  DateTime? getEffectiveDate() {
+  DateTime? getEffectiveDate() { // ? = datetime format
     return selectedDate ?? selectedRange.first;
   }
 

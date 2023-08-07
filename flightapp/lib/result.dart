@@ -12,7 +12,7 @@ import 'flight_search_data.dart';
 
 
 class ResultPage extends StatefulWidget {
-  final FlightSearchData searchData;
+  final FlightSearchData searchData; // retrive data form flight_search_data
 
   ResultPage({required this.searchData});
 
@@ -24,12 +24,12 @@ class ResultPage extends StatefulWidget {
 
 
 class _ResultPageState extends State<ResultPage> {
-  List<Flight> _searchResults = [];
-  bool _isLoading = true;
+  List<Flight> _searchResults = []; // collect all flight that can search in the list
+  bool _isLoading = true; // to check that can access token
 
   @override
   void initState() {
-    print("check init state");///check
+    print("check init state");// check
     super.initState();
     // Call the API and search for flights using the searchData from widget.searchData
     _getAccessToken(); // Get the access token first
@@ -40,7 +40,7 @@ class _ResultPageState extends State<ResultPage> {
       final tokenUrl = 'https://test.api.amadeus.com/v1/security/oauth2/token';
       final clientId = 'PBjFEhvGHXAzDb6blW0BRCcORKTiZKMj';
       final clientSecret = '4Pf1CUcDoTBgL5DB';
-      print("check token");
+      print("check token"); 
       final response = await http.post( // call api for amadeus to gain acess token
         Uri.parse('$tokenUrl'),
         headers: {
@@ -52,7 +52,7 @@ class _ResultPageState extends State<ResultPage> {
           'client_secret': clientSecret,
         },
       );
-
+      //exception
       if (response.statusCode == 200) {
         AccessToken accessToken = AccessToken.fromJson(json.decode(response.body));
         _searchFlights(accessToken);
@@ -61,7 +61,7 @@ class _ResultPageState extends State<ResultPage> {
         throw Exception('Failed to retrieve access token');
       }
     } catch (e) {
-      // Handle any errors that occur during the API call
+      // return error
       print('Error: $e');
     }
   }
@@ -71,10 +71,10 @@ class _ResultPageState extends State<ResultPage> {
   try {
     
     final baseUrl = 'https://test.api.amadeus.com/v2/shopping/flight-offers';
-    final dateFormatter = DateFormat('yyyy-MM-dd');
-    print(widget.searchData.getEffectiveDate()!);
-    final formattedDate = dateFormatter.format(widget.searchData.getEffectiveDate()!);
-    final maxFlights = 2; // Set the maximum number of flight results to display
+    final dateFormatter = DateFormat('yyyy-MM-dd'); // set format date
+    print(widget.searchData.getEffectiveDate()!); // check that what date data is available 
+    final formattedDate = dateFormatter.format(widget.searchData.getEffectiveDate()!); // change format date
+    final maxFlights = 2; // Set the maximum number of flight results to display .now recommend 2 is maximun if set maximum more than it can search it gonna bug it list
 
     // 1. Search for outbound flights
     final outboundResponse = await http.get(
@@ -99,7 +99,7 @@ class _ResultPageState extends State<ResultPage> {
    
    // one way trip and round trip use difference date format
    // still can't figure out how to seperate the one way and round trip
-    
+  // update bug fix 
 
     if (outboundResponse.statusCode == 200 && returnResponse.statusCode == 200) {
     
@@ -111,6 +111,8 @@ class _ResultPageState extends State<ResultPage> {
       int numOutboundResults = outboundFlightData.length;
       int numReturnResults = returnFlightData.length;
 
+      // check that it dont add flight it list more than maximum
+      // it not working propaly if the flight that can search less than maximum = bug ;-;
       if (numOutboundResults > maxFlights) {
         outboundFlightData = outboundFlightData.sublist(0, maxFlights); // Take only the first 'max' flight results
       }
@@ -118,12 +120,14 @@ class _ResultPageState extends State<ResultPage> {
         returnFlightData = returnFlightData.sublist(0, maxFlights); // Take only the first 'max' flight results
       }
 
-      List<Flight> outboundResults = outboundFlightData.map((flight) => Flight.fromJson(flight)).toList();
-      List<Flight> returnResults = returnFlightData.map((flight) => Flight.fromJson(flight)).toList();
+      List<Flight> outboundResults = outboundFlightData.map((flight) => Flight.fromJson(flight)).toList(); //change jason to list
+      List<Flight> returnResults = returnFlightData.map((flight) => Flight.fromJson(flight)).toList(); // change jason to list
 
       // Combine outbound and return results into a single list
       List<Flight> results = [];
       results.addAll(outboundResults);
+
+      // if the bug that one way trip show flight back trip by if one way trip not adding flight back trip in list
       if (widget.searchData.selectedDate == null){
         results.addAll(returnResults);
       }
@@ -143,38 +147,34 @@ class _ResultPageState extends State<ResultPage> {
     setState(() {
       _isLoading = false; // Set loading to false if an error occurred
     });
-    // Handle any errors that occur during the API call
+    // check any errors
     print('Error: $e');
   }
 }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: AppBar( // header
         title: Text("Flight Search Results"),
       ),
-      body: _isLoading // Check if still loading
-          ? Center(
+      body: _isLoading 
+          ? Center( // if can find the flight
               child: CircularProgressIndicator(),
             )
           : _searchResults.isNotEmpty // Check if flight results are available
-              ? ListView.builder(
+              ? ListView.builder( // create listview to show the flight
                   itemCount: _searchResults.length,
                   itemBuilder: (context, index) {
                     Flight flight = _searchResults[index];
                     // Display flight information here using the Flight model properties
-                    // For example:
                     return ListTile(
-                      title: Text('${flight.airline} : ${flight.departure} - ${flight.arrival}'),
+                      title: Text('${flight.airline} : ${flight.departure} - ${flight.arrival}'), //show route
                       subtitle:
-                          Text('Departure: ${flight.departureTime}, Arrival: ${flight.arrivalTime}'),
+                          Text('Departure: ${flight.departureTime}, Arrival: ${flight.arrivalTime}'), // show schedual
                       trailing: Text('\$${flight.price}'),
                       onTap: () {
-                        showDialog(
+                        showDialog( // show Jason of fligh  when clicked
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text('Flight Details'),
@@ -194,7 +194,7 @@ class _ResultPageState extends State<ResultPage> {
                   },
                 )
               : Center(
-                  child: Text('Sorry, no flights found.'),
+                  child: Text('Sorry, no flights found.'), // show error massage if cant find the flight
                 ),
     );
   }
