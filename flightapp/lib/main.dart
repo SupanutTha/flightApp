@@ -1,11 +1,20 @@
 // main.dart
 
 // ignore_for_file: sort_child_properties_last, prefer_const_literals_to_create_immutables, prefer_const_constructors
-
+//
+// IMPORTANT !!!
+// can only run on Chrome
+// macOS can't call api
+// still can't figual it out
+//
+// Second !!
+// destination and desination can only fill with aiport code with UPPERCASE 
+// class selected / baby / chlid / drawer / bottom nav bar
+// dont work yet it only mock up
+//
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flightapp/result.dart';
 import 'package:flutter/material.dart';
-
 import 'flight_search_data.dart';
 
 void main() {
