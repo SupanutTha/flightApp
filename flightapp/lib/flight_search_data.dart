@@ -25,6 +25,11 @@ class FlightSearchData {
     required this.isFirstClass,
   });
   
+
+  // check what date value have data
+  // if one way trip = selectedDate has data
+  // if reound flight = selectedRange.first has data
+  // it not good but it work
   DateTime? getEffectiveDate() { // ? = datetime format
     return selectedDate ?? selectedRange.first;
   }

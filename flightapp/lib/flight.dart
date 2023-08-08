@@ -18,8 +18,8 @@ class Flight {
     required this.classType,
     required this.price,
   });
-
-  factory Flight.fromJson(Map<String, dynamic> json) {
+  // factory is alternative way to create instance but can use crach and more recommend by commuity
+  factory Flight.fromJson(Map<String, dynamic> json) { // map the jason
     return Flight(
       flightNumber: json['id'],
       departure: json['itineraries'][0]['segments'][0]['departure']['iataCode'],
@@ -32,6 +32,7 @@ class Flight {
     );
   }
 
+  // create Jason 
   Map<String, dynamic> toJson() {
     return {
       'flightNumber': flightNumber,
