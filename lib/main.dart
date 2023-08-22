@@ -440,5 +440,5 @@ List<String> iataCodes = [
   'PKX', 'HET', 'NAY', 'TSN', 'TYN', 'CAN', 'CSX', 'KWL', 'NNG', 'SZX', 'CGO',
   'WUH', 'HAK', 'SYX', 'XIY', 'UBN', 'ULN', 'KMG', 'XMN', 'FOC', 'HGH', 'TNA',
   'NGB', 'NKG', 'PVG', 'SHA', 'WNZ', 'CKG', 'KWE', 'CTU', 'URC', 'HRB', 'DLC',
-  'SHE'
+  'SHE','KBV'
 ];

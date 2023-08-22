@@ -1,3 +1,5 @@
+import 'dart:js_util';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -127,13 +129,13 @@ class _ResultPageState extends State<ResultPage> {
       List<Flight> outboundResults = outboundFlightData.map((flight) => Flight.fromJson(flight)).toList(); //change json to list
       print("check");
       List<Flight> returnResults = returnFlightData.map((flight) => Flight.fromJson(flight)).toList(); // change json to list
-      print("out flight: ${outboundResults}");
-      print("in flight: ${returnResults}");
+      // print("out flight: ${outboundResults}");
+      // print("in flight: ${returnResults}");
 
       // Combine outbound and return results into a single list
       List<Flight> results = [];
       results.addAll(outboundResults);
-      print("result list: ${results}");
+      // print("result list: ${results}");
       
 
       // if the bug that one way trip show flight back trip by if one way trip not adding flight back trip in list
@@ -143,8 +145,10 @@ class _ResultPageState extends State<ResultPage> {
       
 
       setState(() {
+        print("set state");
         _searchResults = results;
         _isLoading = false; // Set loading to false after processing the API response
+        print("set state2");
       });
     } else {
       setState(() {
@@ -160,7 +164,7 @@ class _ResultPageState extends State<ResultPage> {
     print('Error: $e');
   }
 }
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,18 +180,34 @@ class _ResultPageState extends State<ResultPage> {
                   itemCount: _searchResults.length,
                   itemBuilder: (context, index) {
                     Flight flight = _searchResults[index];
-                    // Display flight information here using the Flight model properties
+                    List<dynamic> segments = flight.itineraries[0]['segments'];
+                    if (segments.length == 1) {
+                      // Only one segment
+                      String carrierCode = segments[0]['carrierCode'];
+                      String flightNumber = segments[0]['number'];
+                      String duration = segments[0]['duration'];
+                      String departureIataCode = segments[0]['departure']['iataCode'];
+                      String arrivalIataCode = segments[0]['arrival']['iataCode'];
+                      String departureTime = segments[0]['departure']['at'];
+                      String arrivalTime = segments[0]['arrival']['at'];
+
                     return ListTile(
-                      title: Text('${flight.airline} ${flight.flightNumber}: ${flight.departure} - ${flight.arrival}'), //show route
-                      subtitle:
-                          Text('Departure: ${flight.departureTime}, Arrival: ${flight.arrivalTime}'), // show schedual
-                      trailing: Text('\$${flight.price}'),
+                      title: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('$carrierCode$flightNumber: $departureIataCode - $arrivalIataCode'),
+                          Text('Departure Time: $departureTime - Arrival Time: $arrivalTime'),
+                          Text('Duration: $duration'),
+                          Divider()
+                        ],
+                      ),
+                      trailing: Text('\$${flight.price['total']}'),
                       onTap: () {
-                        showDialog( // show Jason of fligh  when clicked
+                        showDialog(
                           context: context,
                           builder: (context) => AlertDialog(
                             title: Text('Flight Details'),
-                            content: Text(json.encode(flight.toJson())), // Show flight details in JSON format
+                            content: Text(json.encode(flight.toJson())),
                             actions: [
                               TextButton(
                                 onPressed: () {
@@ -200,8 +220,60 @@ class _ResultPageState extends State<ResultPage> {
                         );
                       },
                     );
-                  },
-                )
+                    } else if (segments.length > 1) {
+                      // Multiple segments
+                      return ListTile(
+                        title: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: segments.map((segment) {
+                            String carrierCode = segment['carrierCode'];
+                            String flightNumber = segment['number'];
+                            String duration = segment['duration'];
+                            String departureIataCode = segment['departure']['iataCode'];
+                            String arrivalIataCode = segment['arrival']['iataCode'];
+                            String departureTime = segment['departure']['at'];
+                            String arrivalTime = segment['arrival']['at'];
+
+                          return Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('$carrierCode$flightNumber: $departureIataCode - $arrivalIataCode'),
+                              Text('Departure Time: $departureTime - Arrival Time: $arrivalTime'),
+                              Text('Duration: $duration'),
+                            ],
+                          );
+                          }).toList(),
+                        ),
+                        trailing: Text('\$${flight.price['total']}'),
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Flight Details'),
+                              content: Text(json.encode(flight.toJson())),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Close'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
+                    } else {
+                      // No segments, handle this case as needed
+                      return ListTile(
+                        title: Text('No segments found'),
+                        trailing: Text('\$${flight.price['total']}'),
+                      );
+                    }
+              },
+              )
+                  
+                
               : Center(
                   child: Text('Sorry, no flights found.'), // show error massage if cant find the flight
                 ),

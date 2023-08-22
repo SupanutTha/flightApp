@@ -1,48 +1,73 @@
 class Flight {
-  final String flightNumber;
-  final String departure;
-  final String arrival;
-  final String departureTime;
-  final String arrivalTime;
-  final String airline;
-  final String classType;
-  final double price;
+  String type;
+  String id;
+  String source;
+  bool instantTicketingRequired;
+  bool nonHomogeneous;
+  bool oneWay;
+  DateTime lastTicketingDate;
+  DateTime lastTicketingDateTime;
+  int numberOfBookableSeats;
+  List<Map<String, dynamic>> itineraries;
+  Map<String, dynamic> price;
+  Map<String, dynamic> pricingOptions;
+  List<String> validatingAirlineCodes;
+  List<Map<String, dynamic>> travelerPricings;
 
   Flight({
-    required this.flightNumber,
-    required this.departure,
-    required this.arrival,
-    required this.departureTime,
-    required this.arrivalTime,
-    required this.airline,
-    required this.classType,
+    required this.type,
+    required this.id,
+    required this.source,
+    required this.instantTicketingRequired,
+    required this.nonHomogeneous,
+    required this.oneWay,
+    required this.lastTicketingDate,
+    required this.lastTicketingDateTime,
+    required this.numberOfBookableSeats,
+    required this.itineraries,
     required this.price,
+    required this.pricingOptions,
+    required this.validatingAirlineCodes,
+    required this.travelerPricings,
   });
-  // factory is alternative way to create instance but can use crach and more recommend by commuity
-  factory Flight.fromJson(Map<String, dynamic> json) { // map the jason
+
+  factory Flight.fromJson(Map<String, dynamic> json) {
     return Flight(
-      flightNumber: json['id'],
-      departure: json['itineraries'][0]['segments'][0]['departure']['iataCode'],
-      arrival: json['itineraries'][0]['segments'][1]['arrival']['iataCode'],
-      departureTime: json['itineraries'][0]['segments'][0]['departure']['at'],
-      arrivalTime: json['itineraries'][0]['segments'][1]['arrival']['at'],
-      airline: json['itineraries'][0]['segments'][0]['carrierCode'],
-      classType: json['travelerPricings'][0]['fareDetailsBySegment'][0]['cabin'],
-      price: double.parse(json['price']['total']),
+      type: json['type'],
+      id: json['id'],
+      source: json['source'],
+      instantTicketingRequired: json['instantTicketingRequired'],
+      nonHomogeneous: json['nonHomogeneous'],
+      oneWay: json['oneWay'],
+      lastTicketingDate: DateTime.parse(json['lastTicketingDate']),
+      lastTicketingDateTime: DateTime.parse(json['lastTicketingDateTime']),
+      numberOfBookableSeats: json['numberOfBookableSeats'],
+      itineraries: List<Map<String, dynamic>>.from(json['itineraries']),
+      price: Map<String, dynamic>.from(json['price']),
+      pricingOptions: Map<String, dynamic>.from(json['pricingOptions']),
+      validatingAirlineCodes:
+          List<String>.from(json['validatingAirlineCodes']),
+      travelerPricings:
+          List<Map<String, dynamic>>.from(json['travelerPricings']),
     );
   }
 
-  // create Jason 
   Map<String, dynamic> toJson() {
     return {
-      'flightNumber': flightNumber,
-      'departure': departure,
-      'arrival': arrival,
-      'departureTime': departureTime,
-      'arrivalTime': arrivalTime,
-      'airline': airline,
-      'classType': classType,
+      'type': type,
+      'id': id,
+      'source': source,
+      'instantTicketingRequired': instantTicketingRequired,
+      'nonHomogeneous': nonHomogeneous,
+      'oneWay': oneWay,
+      'lastTicketingDate': lastTicketingDate.toIso8601String(),
+      'lastTicketingDateTime': lastTicketingDateTime.toIso8601String(),
+      'numberOfBookableSeats': numberOfBookableSeats,
+      'itineraries': itineraries,
       'price': price,
+      'pricingOptions': pricingOptions,
+      'validatingAirlineCodes': validatingAirlineCodes,
+      'travelerPricings': travelerPricings,
     };
   }
 }

@@ -1,0 +1,43 @@
+{
+type: flight-offer, 
+id: 1, source: GDS, 
+instantTicketingRequired: false, 
+nonHomogeneous: false, 
+oneWay: false, 
+lastTicketingDate: 2023-08-22, 
+lastTicketingDateTime: 2023-08-22, 
+numberOfBookableSeats: 9, 
+itineraries: 
+	[{
+		duration: PT36H40M,
+		segments: 
+			[{
+				departure: {
+					iataCode: BKK, at: 2023-08-22T17:35:00
+					}, 
+				arrival: {
+					iataCode: XMN, terminal: 3, at: 2023-08-22T22:10:00
+					},
+				carrierCode: MF, 
+				number: 834, 
+				aircraft: {code: 738}, 
+				operating: {carrierCode: MF}, 
+				duration: PT3H35M, 
+				id: 61, 
+				numberOfStops: 0, 
+				blacklistedInEU: false
+				}, 
+				{departure: 
+					{iataCode: XMN, 
+						terminal: 3, 
+						at: 2023-08-23T22:00:00}, 
+					arrival: {iataCode: SYD, terminal: 1, at: 2023-08-24T09:15:00},
+					carrierCode: MF, 
+					number: 801, 
+					aircraft: {code: 789}, 
+					operating: {carrierCode: MF}, 
+					duration: PT9H15M, 
+					id: 62, 
+					numberOfStops: 0, 
+					blacklistedInEU: false}]}], 
+price: {currency: EUR, total: 226.19, base: 101.00, fees: [{amount: 0.00, type: SUPPLIER}, {amount: 0.00, type: TICKETING}], grandTotal: 226.19}, pricingOptions: {fareType: [PUBLISHED], includedCheckedBagsOnly: true}, validatingAirlineCodes: [MF], travelerPricings: [{travelerId: 1, fareOption: STANDARD, travelerType: ADULT, price: {currency: EUR, total: 226.19, base: 101.00}, fareDetailsBySegment: [{segmentId: 61, cabin: ECONOMY, fareBasis: SOW6BAUS, class: S, includedCheckedBags: {quantity: 1}}, {segmentId: 62, cabin: ECONOMY, fareBasis: SOW6BAUS, class: S, includedCheckedBags: {quantity: 1}}]}]},
