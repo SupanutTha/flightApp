@@ -1,16 +1,16 @@
 import 'dart:js_util';
 
-import 'package:flightapp/flight_summary.dart';
-import 'package:flightapp/return_flight.dart';
-import 'package:flightapp/selected_flights.dart';
+import 'package:flightapp/screens/flight_summary.dart';
+import 'package:flightapp/screens/return_flight.dart';
+import 'package:flightapp/models/selected_flights.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
-import 'accessToken.dart';
-import 'flight.dart';
-import 'flight_search_data.dart';
+import '../services/accessToken.dart';
+import '../models/flight.dart';
+import '../models/flight_search_data.dart';
 
 
 

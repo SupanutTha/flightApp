@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:flightapp/selected_flights.dart';
+import 'package:flightapp/models/selected_flights.dart';
 import 'package:flutter/material.dart';
-import 'package:flightapp/flight.dart';
+import 'package:flightapp/models/flight.dart';
 
 import 'flight_summary.dart';
 

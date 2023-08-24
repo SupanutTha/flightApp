@@ -1,6 +1,6 @@
-import 'package:flightapp/selected_flights.dart';
+import 'package:flightapp/models/selected_flights.dart';
 import 'package:flutter/material.dart';
-import 'flight.dart'; // Import your Flight class
+import '../models/flight.dart'; // Import your Flight class
 
 class FlightSummary extends StatelessWidget {
   final Flight flight;
