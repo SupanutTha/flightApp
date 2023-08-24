@@ -13,7 +13,7 @@
 // dont work yet it only mock up
 //
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
-import 'package:flightapp/result.dart';
+import 'package:flightapp/out_flight.dart';
 import 'package:flutter/material.dart';
 import 'flight_search_data.dart';
 

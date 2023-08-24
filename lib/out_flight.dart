@@ -1,5 +1,8 @@
 import 'dart:js_util';
 
+import 'package:flightapp/flight_summary.dart';
+import 'package:flightapp/return_flight.dart';
+import 'package:flightapp/selected_flights.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -27,6 +30,7 @@ class ResultPage extends StatefulWidget {
 
 class _ResultPageState extends State<ResultPage> {
   List<Flight> _searchResults = []; // collect all flight that can search in the list
+  List<Flight> _searchResultsReturn = [];
   bool _isLoading = true; // to check that can access token
 
   @override
@@ -106,15 +110,15 @@ class _ResultPageState extends State<ResultPage> {
     if (outboundResponse.statusCode == 200 && returnResponse.statusCode == 200) {
     
       Map<String, dynamic> outboundData = json.decode(outboundResponse.body);
-      Map<String, dynamic> returnData = json.decode(returnResponse.body);
       List<dynamic> outboundFlightData = outboundData['data'];
+      Map<String , dynamic> returnData = json.decode(returnResponse.body);
       List<dynamic> returnFlightData = returnData['data'];
 
       int numOutboundResults = outboundFlightData.length;
       int numReturnResults = returnFlightData.length;
 
+
       print("out flight: ${numOutboundResults}");
-      print("in flight: ${numReturnResults}");
 
       // check that it dont add flight in list more than maximum
       // it not working propaly if the flight that can search less than maximum = bug ;-;
@@ -124,29 +128,32 @@ class _ResultPageState extends State<ResultPage> {
       if (numReturnResults > maxFlights) {
         returnFlightData = returnFlightData.sublist(0, maxFlights); // Take only the first 'max' flight results
       }
+
       print("check maximum flight limit if");
       print(outboundFlightData);
       List<Flight> outboundResults = outboundFlightData.map((flight) => Flight.fromJson(flight)).toList(); //change json to list
+      List<Flight> returnResults = returnFlightData.map((flight) => Flight.fromJson(flight)).toList(); // change jason to list
       print("check");
-      List<Flight> returnResults = returnFlightData.map((flight) => Flight.fromJson(flight)).toList(); // change json to list
       // print("out flight: ${outboundResults}");
       // print("in flight: ${returnResults}");
 
       // Combine outbound and return results into a single list
-      List<Flight> results = [];
-      results.addAll(outboundResults);
+      List<Flight> resultsOut = [];
+      resultsOut.addAll(outboundResults);
       // print("result list: ${results}");
       
 
       // if the bug that one way trip show flight back trip by if one way trip not adding flight back trip in list
+      List<Flight> resultsIn = [];
       if (widget.searchData.selectedDate == null){
-        results.addAll(returnResults);
+        resultsIn.addAll(returnResults);
       }
       
 
       setState(() {
         print("set state");
-        _searchResults = results;
+        _searchResults = resultsOut;
+        _searchResultsReturn = resultsIn;
         _isLoading = false; // Set loading to false after processing the API response
         print("set state2");
       });
@@ -203,22 +210,46 @@ class _ResultPageState extends State<ResultPage> {
                       ),
                       trailing: Text('\$${flight.price['total']}'),
                       onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: Text('Flight Details'),
-                            content: Text(json.encode(flight.toJson())),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                child: Text('Close'),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                          showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text('Flight Details'),
+                              content: Text(json.encode(flight.toJson())),
+                              actions: [
+                                TextButton(
+                                  onPressed: (){
+                                    Navigator.of(context).pop();
+                                    SelectedFlights.addSelectedFlight(flight);
+                                    if(widget.searchData.selectedRange.last != null){
+                                      Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ReturnFlightSelection(
+                                          outboundFlight: flight, 
+                                          returnFlights: _searchResultsReturn)
+                                        ),
+                                    );
+                                    }
+                                    else{
+                                    Navigator.push(
+                                      context,
+                                       MaterialPageRoute(
+                                        builder: (context) => FlightSummary(flight: flight)
+                                        ),
+                                      );
+                                    }
+                                  },
+                                   child: Text('Select Flight')),
+                                   TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Close'),
+                                )
+                              ],
+                            ),
+                          );
+                        },
                     );
                     } else if (segments.length > 1) {
                       // Multiple segments
@@ -253,11 +284,35 @@ class _ResultPageState extends State<ResultPage> {
                               content: Text(json.encode(flight.toJson())),
                               actions: [
                                 TextButton(
+                                  onPressed: (){
+                                    Navigator.of(context).pop();
+                                    SelectedFlights.addSelectedFlight(flight);
+                                    if(widget.searchData.selectedRange.last != null){
+                                      Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ReturnFlightSelection(
+                                          outboundFlight: flight, 
+                                          returnFlights: _searchResultsReturn)
+                                        ),
+                                    );
+                                    }
+                                    else{
+                                    Navigator.push(
+                                      context,
+                                       MaterialPageRoute(
+                                        builder: (context) => FlightSummary(flight: flight)
+                                        ),
+                                      );
+                                    }
+                                  },
+                                   child: Text('Select Flight')),
+                                   TextButton(
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
                                   child: Text('Close'),
-                                ),
+                                )
                               ],
                             ),
                           );
