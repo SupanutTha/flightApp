@@ -210,7 +210,7 @@ class _HomePageState extends State<HomePage> {
       flex: 1, 
       child: TextField( //mock up cant search
         controller: _kidCountController,
-        decoration: InputDecoration(labelText: "Kid (2-11 years) *WIP"),
+        decoration: InputDecoration(labelText: "Kid (2-11 years)"),
         keyboardType: TextInputType.text,
       ),
     ),
@@ -218,7 +218,7 @@ class _HomePageState extends State<HomePage> {
       flex: 1,  
       child: TextField( //mock up cant search
         controller: _babyCountController,
-        decoration: InputDecoration(labelText: "Baby (below 2 years) *WIP"),
+        decoration: InputDecoration(labelText: "Baby (below 2 years)"),
         keyboardType: TextInputType.text,
       ),
     ),
@@ -231,28 +231,28 @@ class _HomePageState extends State<HomePage> {
       flex: 1,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text('Economic Class (wip)'),
+        child: Text('Economic Class'),
       ),
     ),
     Expanded(
       flex: 1, 
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text('Premium Economic Class (wip)'),
+        child: Text('Premium Economic Class'),
       ),
     ),
     Expanded(
       flex: 1, 
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text('Business Class (wip)'),
+        child: Text('Business Class'),
       ),
     ),
     Expanded(
       flex: 1,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Text('First Class (wip)'),
+        child: Text('First Class'),
       ),
     ),
   ],

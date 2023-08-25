@@ -75,17 +75,30 @@ class _ResultPageState extends State<ResultPage> {
     
     Future<void> _searchFlights(AccessToken accessToken) async { // use acceess to token to call api to search data
   try {
-    
+    var flightClass = '';
+    if ( widget.searchData.isEconomicClass){
+      flightClass = 'ECONOMY';
+    }
+    else if( widget.searchData.isBusinessClass){
+      flightClass = 'BUSINESS';
+    }
+    else if( widget.searchData.isPremiumEconomicClass){
+      flightClass = 'PREMIUM_ECONOMY';
+    }
+    else if( widget.searchData.isPremiumEconomicClass){
+      flightClass = 'FIRST';
+    }
+
     final baseUrl = 'https://test.api.amadeus.com/v2/shopping/flight-offers';
     final dateFormatter = DateFormat('yyyy-MM-dd'); // set format date
     print(widget.searchData.getEffectiveDate()!); // check that what date data is available 
     final formattedDate = dateFormatter.format(widget.searchData.getEffectiveDate()!); // change format date
-    final maxFlights = 10; // Set the maximum number of flight results to display .now recommend 2 is maximun if set maximum more than it can search it gonna bug it list
+    final maxFlights = 1; // Set the maximum number of flight results to display .now recommend 2 is maximun if set maximum more than it can search it gonna bug it list
 
     // 1. Search for outbound flights
     final outboundResponse = await http.get(
       Uri.parse(
-        '$baseUrl?originLocationCode=${widget.searchData.departure}&destinationLocationCode=${widget.searchData.arrival}&departureDate=$formattedDate&adults=${widget.searchData.adultCount}',
+        '$baseUrl?originLocationCode=${widget.searchData.departure}&destinationLocationCode=${widget.searchData.arrival}&departureDate=$formattedDate&adults=${widget.searchData.adultCount}&children=${widget.searchData.kidCount}&infants=${widget.searchData.babyCount}&travelClass=$flightClass',
       ),
       headers: {
         'Authorization': 'Bearer ${accessToken.accessToken}',
@@ -96,7 +109,7 @@ class _ResultPageState extends State<ResultPage> {
     final returnDate = dateFormatter.format(widget.searchData.getEffectiveDateReturn()!);
     final returnResponse = await http.get(
       Uri.parse(
-        '$baseUrl?originLocationCode=${widget.searchData.arrival}&destinationLocationCode=${widget.searchData.departure}&departureDate=$returnDate&adults=${widget.searchData.adultCount}',
+        '$baseUrl?originLocationCode=${widget.searchData.arrival}&destinationLocationCode=${widget.searchData.departure}&departureDate=$returnDate&adults=${widget.searchData.adultCount}&children=${widget.searchData.kidCount}&infants=${widget.searchData.babyCount}&travelClass=$flightClass',
       ),
       headers: {
         'Authorization': 'Bearer ${accessToken.accessToken}',
@@ -336,24 +349,3 @@ class _ResultPageState extends State<ResultPage> {
   }
 }
 
-void main() {
-  runApp(
-    MaterialApp(
-      home: ResultPage(
-        searchData: FlightSearchData(
-          departure: 'SYD',
-          arrival: 'BKK',
-          adultCount: '1',
-          kidCount: '0',
-          babyCount: '0',
-          selectedDate: DateTime.parse('2023-08-03'),
-          selectedRange: [],
-          isEconomicClass: true,
-          isPremiumEconomicClass: false,
-          isBusinessClass: false,
-          isFirstClass: false,
-        ),
-      ),
-    ),
-  );
-}
