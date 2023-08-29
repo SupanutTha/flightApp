@@ -17,6 +17,7 @@ import 'package:flightapp/screens/out_flight.dart';
 import 'package:flutter/material.dart';
 import '../models/flight_search_data.dart';
 
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -25,6 +26,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  
+  
   List<bool> _isSelected = [true, false]; //for one way - round button default is one-way
   List<bool> _isSelectedClass = [true, false, false, false]; //for class selected eco/bus/first/.. default is eco
   List<DateTime?> _singleDatePickerValueWithDefaultValue = [ // calendar for one way trip
@@ -88,7 +91,7 @@ class _HomePageState extends State<HomePage> {
       
       appBar: AppBar( // header
         title:  Image(
-          image:AssetImage("../images/plane.png"), // app icon
+          image:AssetImage("images/plane.png"), // app icon
           height: 40,
           ),
         actions: [],

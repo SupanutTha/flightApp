@@ -30,15 +30,8 @@ void main()  async{
   } catch (e) {
     print("Error initializing database: $e");
   }
-    // drop airport table
-  //   try {
-  //   await dbHelper.dropAirportsTable();
-  //   print("airports table dropped successfully");
-  // } catch (e) {
-  //   print("Error dropping airports table: $e");
-  // }
-
-
+  
+  // add data in database
   // final jsonString = await dbHelper.loadAsset('assets/airports_data.json');
   // final jsonData = json.decode(jsonString);
   //  try{
