@@ -33,6 +33,27 @@ class _ResultPageState extends State<ResultPage> {
   List<Flight> _searchResultsReturn = [];
   bool _isLoading = true; // to check that can access token
 
+  // String _sortingOption = 'Default'; // Default sorting option
+  // bool _sortAscending = true; // Default sorting order
+
+  // void _sortResults(String option) {
+  //   setState(() {
+  //     _sortingOption = option;
+
+  //     if (_sortingOption == 'Fastest') {
+  //       _searchResults.sort((a, b) => a.getTotalDuration().compareTo(b.getTotalDuration()));
+  //     } else if (_sortingOption == 'Cheapest') {
+  //       _searchResults.sort((a, b) => a.price['total'].compareTo(b.price['total']));
+  //     } else if (_sortingOption == 'Direct') {
+  //       _searchResults.sort((a, b) => a.itineraries[0]['segments'].length.compareTo(b.itineraries[0]['segments'].length));
+  //     }
+
+  //     if (!_sortAscending) {
+  //       _searchResults = List.from(_searchResults.reversed);
+  //     }
+  //   });
+  // }
+  
   @override
   void initState() {
     print("check init state");// check
@@ -93,7 +114,7 @@ class _ResultPageState extends State<ResultPage> {
     final dateFormatter = DateFormat('yyyy-MM-dd'); // set format date
     print(widget.searchData.getEffectiveDate()!); // check that what date data is available 
     final formattedDate = dateFormatter.format(widget.searchData.getEffectiveDate()!); // change format date
-    final maxFlights = 1; // Set the maximum number of flight results to display .now recommend 2 is maximun if set maximum more than it can search it gonna bug it list
+    final maxFlights = 50; // Set the maximum number of flight results to display .now recommend 2 is maximun if set maximum more than it can search it gonna bug it list
 
     // 1. Search for outbound flights
     final outboundResponse = await http.get(

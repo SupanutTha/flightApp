@@ -24,7 +24,21 @@ class _AutocompleteTextfieldState extends State<AutocompleteTextfield> {
               controller: widget.controller,
               decoration: InputDecoration(
                 labelText: widget.initialText,
-                border: UnderlineInputBorder()
+                border: UnderlineInputBorder(),
+               suffix: GestureDetector(
+                onTap: () {
+                  widget.controller.clear();
+                },
+                child: Icon(Icons.clear , color: Colors.blue, size: 20,),
+              ),
+                // prefixIcon: widget.controller.text.isNotEmpty
+                //   ? IconButton(
+                //       icon: Icon(Icons.clear),
+                //       onPressed: () {
+                //         widget.controller.clear();
+                //       },
+                //     )
+                //   : null,
               ),
             ),
             suggestionsCallback: (String pattern)  async {
@@ -48,6 +62,7 @@ class _AutocompleteTextfieldState extends State<AutocompleteTextfield> {
               debugPrint('You just selected $suggestion');
             },
           ),
+          
         ],
       ),
     );
