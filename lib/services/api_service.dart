@@ -7,7 +7,7 @@ import '../models/flight.dart';
 import '../models/flight_search_data.dart';
 
 class ApiService {
-  static Future<AccessToken> get getAccessToken async {
+  static Future<String> getAccessToken() async {
     try { // exception to check api status
       final tokenUrl = 'https://test.api.amadeus.com/v1/security/oauth2/token';
       final clientId = 'PBjFEhvGHXAzDb6blW0BRCcORKTiZKMj';
@@ -29,7 +29,7 @@ class ApiService {
         AccessToken accessToken = AccessToken.fromJson(json.decode(response.body));
         //searchFlights(accessToken);
         print("token grain");
-        return accessToken;
+        return accessToken.accessToken;
       } else {
         throw Exception('Failed to retrieve access token');
       }
@@ -40,7 +40,8 @@ class ApiService {
     }
   }
 
-  static Future<(List<Flight>, List<Flight>)> searchFlights(AccessToken accessToken, FlightSearchData searchData) async {
+  static Future<(List<Flight>, List<Flight>)> searchFlights( FlightSearchData searchData) async {
+    final accessToken = await getAccessToken();
   try {
     var flightClass = '';
     if ( searchData.isEconomicClass){
@@ -62,13 +63,18 @@ class ApiService {
     final formattedDate = dateFormatter.format(searchData.getEffectiveDate()!); // change format date
     final maxFlights = 50; // Set the maximum number of flight results to display .now recommend 2 is maximun if set maximum more than it can search it gonna bug it list
 
+    print("check search");
+    print(searchData.departure);
+    print(searchData.arrival);
+    print(flightClass);
+    print(accessToken);
     // 1. Search for outbound flights
     final outboundResponse = await http.get(
       Uri.parse(
         '$baseUrl?originLocationCode=${searchData.departure}&destinationLocationCode=${searchData.arrival}&departureDate=$formattedDate&adults=${searchData.adultCount}&children=${searchData.kidCount}&infants=${searchData.babyCount}&travelClass=$flightClass',
       ),
       headers: {
-        'Authorization': 'Bearer ${accessToken.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
 
@@ -79,10 +85,11 @@ class ApiService {
         '$baseUrl?originLocationCode=${searchData.arrival}&destinationLocationCode=${searchData.departure}&departureDate=$returnDate&adults=${searchData.adultCount}&children=${searchData.kidCount}&infants=${searchData.babyCount}&travelClass=$flightClass',
       ),
       headers: {
-        'Authorization': 'Bearer ${accessToken.accessToken}',
+        'Authorization': 'Bearer $accessToken',
       },
     );
-   
+    print(outboundResponse.statusCode);
+    print(returnResponse.statusCode);
     if (outboundResponse.statusCode == 200 && returnResponse.statusCode == 200) {
     
       Map<String, dynamic> outboundData = json.decode(outboundResponse.body);
@@ -124,7 +131,7 @@ class ApiService {
       if (searchData.selectedDate == null){
         resultsIn.addAll(returnResults);
       }
-      return (resultsIn,resultsOut);
+      return (resultsOut,resultsIn);
 
       
         // print("set state");
