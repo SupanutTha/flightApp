@@ -1,37 +1,31 @@
 import 'dart:convert';
-
-import 'package:flightapp/models/airline_db.dart';
 import 'package:flutter/material.dart';
 import 'package:flightapp/screens/homepage.dart'; // Import the HomePage class
-import 'package:sqflite/sqflite.dart';
-import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'database/database_helper.dart';
-import 'models/airport_db.dart';
 
 
 void main()  async{
   // Initialize the databaseFactory for the sqflite_common_ffi backend
   // Initialize the sqflite_common_ffi backend
-  databaseFactory = databaseFactoryFfiWeb;
   WidgetsFlutterBinding.ensureInitialized();
   final dbHelper = DatabaseHelper.instance; // Create an instance of DatabaseHelper
 
-  // Initialize the database
-  try {
-    await DatabaseHelper.instance.airlinesDatabase;
-    print("Database initialized successfully");
-  } catch (e) {
-    print("Error initializing database: $e");
-  }
+  // // Initialize the database
+  // try {
+  //   await DatabaseHelper.instance.airlinesDatabase;
+  //   print("Database initialized successfully");
+  // } catch (e) {
+  //   print("Error initializing database: $e");
+  // }
 
-  try{
-    await DatabaseHelper.instance.airportsDatabase;
-   print("Database initialized successfully");
-  } catch (e) {
-    print("Error initializing database: $e");
-  }
+  // try{
+  //   await DatabaseHelper.instance.airportsDatabase;
+  //  print("Database initialized successfully");
+  // } catch (e) {
+  //   print("Error initializing database: $e");
+  // }
   
-  // add data in database
+  // // add data in database
   // final jsonString = await dbHelper.loadAsset('assets/airports_data.json');
   // final jsonData = json.decode(jsonString);
   //  try{
@@ -60,10 +54,10 @@ void main()  async{
     print(airport.name);
   });
 
-  final airlines = await dbHelper.retrieveAirlines();
-  airlines.forEach((airline){
-    print(airline.name);
-  }) ;
+  // final airlines = await dbHelper.retrieveAirlines();
+  // airlines.forEach((airline){
+  //   print(airline.name);
+  // }) ;
 
 
 

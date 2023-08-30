@@ -12,11 +12,12 @@
 // class selected / baby / chlid / drawer / bottom nav bar
 // dont work yet it only mock up
 //
+//import '/widgets/autocomplete_textfield.dart';
+import '/widgets/typeahead_desination.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'package:flightapp/screens/out_flight.dart';
 import 'package:flutter/material.dart';
 import '../models/flight_search_data.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -177,88 +178,100 @@ class _HomePageState extends State<HomePage> {
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField( // only upper case and airport short name
-                    controller: _departureController, // Use the controller for Departure
-                    decoration: InputDecoration(labelText: "Departure (airport code Ex. BKK)"),
-                    keyboardType: TextInputType.text,
-                    
-                    
-                    
-                    
-                  ),
+                Column(
+                  children: [
+                    AutocompleteTextfield(initialText: 'Departure', controller: _departureController,),
+                    AutocompleteTextfield(initialText: 'Arrival', controller: _arrivalController)
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _arrivalController, // Use the controller for Arrival
-                    decoration: InputDecoration(labelText: "Arrival (airport code Ex. SYD)" ),
-                    keyboardType: TextInputType.text,
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(
+                //     children: [
+                //       //AutocompleteTextfield(initialText: 'Enter a city or airport'),
+                //     ],
+                //   ),
+                  
+                //   //  child: TextField( // only upper case and airport short name
+                //   //   controller: _departureController, // Use the controller for Departure
+                //   //   decoration: InputDecoration(labelText: "Departure (airport code Ex. BKK)"),
+                //   //   keyboardType: TextInputType.text,
+                //   // ),
+                // ),
+                // Padding(
+                //   padding: const EdgeInsets.all(8.0),
+                //   child: Row(
+                //     children: [
+                //       //AutocompleteTextfield(initialText: 'Arrival'),
+                //     ],
+                //   )
+                //   // child: TextField(
+                //   //   controller: _arrivalController, // Use the controller for Arrival
+                //   //   decoration: InputDecoration(labelText: "Arrival (airport code Ex. SYD)" ),
+                //   //   keyboardType: TextInputType.text,
+                //   // ),
+                // ),
 
 
                 Row(
-  children: [
-    Expanded(
-      flex: 1,
-      child: TextField(
-        controller: _adultCountController,
-        decoration: InputDecoration(labelText: "Adult (more than 11 years)"),
-        keyboardType: TextInputType.text,
-      ),
-    ),
-    Expanded(
-      flex: 1, 
-      child: TextField( //mock up cant search
-        controller: _kidCountController,
-        decoration: InputDecoration(labelText: "Kid (2-11 years)"),
-        keyboardType: TextInputType.text,
-      ),
-    ),
-    Expanded(
-      flex: 1,  
-      child: TextField( //mock up cant search
-        controller: _babyCountController,
-        decoration: InputDecoration(labelText: "Baby (below 2 years)"),
-        keyboardType: TextInputType.text,
-      ),
-    ),
-  ],
-),
-
-                ToggleButtons( //select class eco/ flight / business  premium(mock up)
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: TextField(
+                      controller: _adultCountController,
+                      decoration: InputDecoration(labelText: "Adult (more than 11 years)"),
+                      keyboardType: TextInputType.text,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1, 
+                    child: TextField( //mock up cant search
+                      controller: _kidCountController,
+                      decoration: InputDecoration(labelText: "Kid (2-11 years)"),
+                      keyboardType: TextInputType.text,
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,  
+                    child: TextField( //mock up cant search
+                      controller: _babyCountController,
+                      decoration: InputDecoration(labelText: "Baby (below 2 years)"),
+                      keyboardType: TextInputType.text,
+                    ),
+                  ),
+                ],
+              ),
+              ToggleButtons( //select class eco/ flight / business  premium(mock up)
                   children: [
-    Expanded(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text('Economic Class'),
-      ),
-    ),
-    Expanded(
-      flex: 1, 
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text('Premium Economic Class'),
-      ),
-    ),
-    Expanded(
-      flex: 1, 
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text('Business Class'),
-      ),
-    ),
-    Expanded(
-      flex: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Text('First Class'),
-      ),
-    ),
-  ],
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Economic Class'),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1, 
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Premium Economic Class'),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1, 
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('Business Class'),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text('First Class'),
+                      ),
+                    ),
+                  ],
                   isSelected: _isSelectedClass,
                   onPressed: (index) {
                     setState(() { // use same method as trip mode selected
@@ -378,6 +391,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
 
 List<String> iataCodes = [
   'POM', 'KEF', 'PRN', 'YEG', 'YHZ', 'YOW', 'YUL', 'YVR', 'YWG', 'YYC', 'YYJ',

@@ -1,13 +1,10 @@
 import 'dart:convert';
-
 import 'package:flightapp/models/airline_db.dart';
 import 'package:flutter/services.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-// Import your Airport class
 import '/models/airport_db.dart';
-import '/models/airline_db.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._init();
@@ -23,9 +20,10 @@ class DatabaseHelper {
     return _airportsDatabase!;
   }
 
-   Future<Database> get airlinesDatabase async {
+  Future<Database> get airlinesDatabase async {
     if (_airlineDatabase != null) return _airlineDatabase!;
     _airlineDatabase = await _initAirlinesDB('airline.db');
+    
     return _airlineDatabase!;
   }
   
@@ -34,7 +32,7 @@ class DatabaseHelper {
   Future<Database> _initAirportsDB(String dbName) async {
     final dbPath = await getDatabasesPath();
     final path = join(dbPath, dbName);
-
+    print(path);
     return await openDatabase(path, version: 1, onCreate: _createAirportsDB);
   }
 
@@ -50,7 +48,7 @@ class DatabaseHelper {
   final textType = 'TEXT NOT NULL';
 
   await db.execute('''
-    CREATE TABLE airports (
+    CREATE TABLE IF NOT EXISTS airports (
       objectID $idType,
       name $textType,
       city $textType,
@@ -69,7 +67,7 @@ class DatabaseHelper {
   final textType = 'TEXT NOT NULL';
 
   await db.execute('''
-    CREATE TABLE airlines (
+    CREATE TABLE IF NOT EXISTS airlines (
       id $idType,
       name $textType,
       alias TEXT,
@@ -81,8 +79,6 @@ class DatabaseHelper {
       UNIQUE (id) ON CONFLICT REPLACE
     )
   ''');
-
-
 }
 
 
@@ -136,6 +132,7 @@ Future<List<Airline>> retrieveAirlines() async {
     final db = await instance.airportsDatabase;
     db.close();
   }
+  
   Future<void> insertAirportJsonToDatabase(List<dynamic> jsonList) async {
     final db = await instance.airportsDatabase;
     for (final json in jsonList) {
@@ -150,7 +147,7 @@ Future<List<Airline>> retrieveAirlines() async {
         linksCount: json['links_count'],
       );
       await db.insert('airports', airport.toMap());
-      print('insert :${airport}');
+      print('insert complete}');
     }
     
   }
@@ -181,7 +178,7 @@ Future<List<Airline>> retrieveAirlines() async {
         );
 
     await db.insert('airlines',airline.toMap());
-    print('Inserted airline: ${airline.name}');
+    print('Inserted airline: complete');
   }
 }
 
