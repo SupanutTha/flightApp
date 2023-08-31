@@ -5,6 +5,7 @@
 import 'package:flightapp/screens/flight_summary.dart';
 import 'package:flightapp/screens/return_flight.dart';
 import 'package:flightapp/models/selected_flights.dart';
+import 'package:flightapp/widgets/sort_flight_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -35,11 +36,20 @@ class _ResultPageState extends State<ResultPage> {
   List<Flight> _searchResults = [];
   List<Flight> _searchResultsReturn = [];
   bool _isLoading = true; // to check that can access token
+  String _sortingOption = 'Default'; // Default sorting option
+  bool _sortAscending = true; // Default sorting order
+
   
   @override
   void initState() {
     super.initState();
     _fetchFlightResults();
+  }
+  void _sortResults(String option, List<Flight> sortedResults) {
+    setState(() {
+      _sortingOption = option;
+      _searchResults = sortedResults;
+    });
   }
 
   Future<void> _fetchFlightResults() async {
@@ -57,187 +67,25 @@ class _ResultPageState extends State<ResultPage> {
         _isLoading = false;
       });
       print('Error: $e');
-      // You might want to show an error message to the user here
     }
   }
-  // String _sortingOption = 'Default'; // Default sorting option
-  // bool _sortAscending = true; // Default sorting order
 
-  // void _sortResults(String option) {
-  //   setState(() {
-  //     _sortingOption = option;
-
-  //     if (_sortingOption == 'Fastest') {
-  //       _searchResults.sort((a, b) => a.getTotalDuration().compareTo(b.getTotalDuration()));
-  //     } else if (_sortingOption == 'Cheapest') {
-  //       _searchResults.sort((a, b) => a.price['total'].compareTo(b.price['total']));
-  //     } else if (_sortingOption == 'Direct') {
-  //       _searchResults.sort((a, b) => a.itineraries[0]['segments'].length.compareTo(b.itineraries[0]['segments'].length));
-  //     }
-
-  //     if (!_sortAscending) {
-  //       _searchResults = List.from(_searchResults.reversed);
-  //     }
-  //   });
-  // }
-  
-  // @override
-  // void initState() {
-  //   print("check init state");// check
-  //   super.initState();
-  //   // Call the API and search for flights using the searchData from widget.searchData
-  //   getAccessToken; // Get the access token first
-  // }
-  
-//   Future<void> _getAccessToken() async { // need to get access token every time to search data
-//     try { // exception to check api status
-//       final tokenUrl = 'https://test.api.amadeus.com/v1/security/oauth2/token';
-//       final clientId = 'PBjFEhvGHXAzDb6blW0BRCcORKTiZKMj';
-//       final clientSecret = '4Pf1CUcDoTBgL5DB';
-//       print("check token"); 
-//       final response = await http.post( // call api for amadeus to gain acess token
-//         Uri.parse('$tokenUrl'),
-//         headers: {
-//           'Content-Type': 'application/x-www-form-urlencoded',
-//         },
-//         body: {
-//           'grant_type': 'client_credentials',
-//           'client_id': clientId,
-//           'client_secret': clientSecret,
-//         },
-//       );
-//       //exception
-//       if (response.statusCode == 200) {
-//         AccessToken accessToken = AccessToken.fromJson(json.decode(response.body));
-//         _searchFlights(accessToken);
-//         print("token grain");
-//       } else {
-//         throw Exception('Failed to retrieve access token');
-//       }
-//     } catch (e) {
-//       // return error
-//       print('Error: $e');
-//     }
-//   }
-
-    
-//     Future<void> _searchFlights(AccessToken accessToken) async { // use acceess to token to call api to search data
-//   try {
-//     var flightClass = '';
-//     if ( widget.searchData.isEconomicClass){
-//       flightClass = 'ECONOMY';
-//     }
-//     else if( widget.searchData.isBusinessClass){
-//       flightClass = 'BUSINESS';
-//     }
-//     else if( widget.searchData.isPremiumEconomicClass){
-//       flightClass = 'PREMIUM_ECONOMY';
-//     }
-//     else if( widget.searchData.isPremiumEconomicClass){
-//       flightClass = 'FIRST';
-//     }
-
-//     final baseUrl = 'https://test.api.amadeus.com/v2/shopping/flight-offers';
-//     final dateFormatter = DateFormat('yyyy-MM-dd'); // set format date
-//     print(widget.searchData.getEffectiveDate()!); // check that what date data is available 
-//     final formattedDate = dateFormatter.format(widget.searchData.getEffectiveDate()!); // change format date
-//     final maxFlights = 50; // Set the maximum number of flight results to display .now recommend 2 is maximun if set maximum more than it can search it gonna bug it list
-
-//     // 1. Search for outbound flights
-//     final outboundResponse = await http.get(
-//       Uri.parse(
-//         '$baseUrl?originLocationCode=${widget.searchData.departure}&destinationLocationCode=${widget.searchData.arrival}&departureDate=$formattedDate&adults=${widget.searchData.adultCount}&children=${widget.searchData.kidCount}&infants=${widget.searchData.babyCount}&travelClass=$flightClass',
-//       ),
-//       headers: {
-//         'Authorization': 'Bearer ${accessToken.accessToken}',
-//       },
-//     );
-
-//     // 2. Search for return flights
-//     final returnDate = dateFormatter.format(widget.searchData.getEffectiveDateReturn()!);
-//     final returnResponse = await http.get(
-//       Uri.parse(
-//         '$baseUrl?originLocationCode=${widget.searchData.arrival}&destinationLocationCode=${widget.searchData.departure}&departureDate=$returnDate&adults=${widget.searchData.adultCount}&children=${widget.searchData.kidCount}&infants=${widget.searchData.babyCount}&travelClass=$flightClass',
-//       ),
-//       headers: {
-//         'Authorization': 'Bearer ${accessToken.accessToken}',
-//       },
-//     );
-   
-//    // one way trip and round trip use difference date format
-//    // still can't figure out how to seperate the one way and round trip
-//   // update bug fix 
-
-//     if (outboundResponse.statusCode == 200 && returnResponse.statusCode == 200) {
-    
-//       Map<String, dynamic> outboundData = json.decode(outboundResponse.body);
-//       List<dynamic> outboundFlightData = outboundData['data'];
-//       Map<String , dynamic> returnData = json.decode(returnResponse.body);
-//       List<dynamic> returnFlightData = returnData['data'];
-
-//       int numOutboundResults = outboundFlightData.length;
-//       int numReturnResults = returnFlightData.length;
-
-
-//       print("out flight: ${numOutboundResults}");
-
-//       // check that it dont add flight in list more than maximum
-//       // it not working propaly if the flight that can search less than maximum = bug ;-;
-//       if (numOutboundResults > maxFlights) {
-//         outboundFlightData = outboundFlightData.sublist(0, maxFlights); // Take only the first 'max' flight results
-//       }
-//       if (numReturnResults > maxFlights) {
-//         returnFlightData = returnFlightData.sublist(0, maxFlights); // Take only the first 'max' flight results
-//       }
-
-//       print("check maximum flight limit if");
-//       print(outboundFlightData);
-//       List<Flight> outboundResults = outboundFlightData.map((flight) => Flight.fromJson(flight)).toList(); //change json to list
-//       List<Flight> returnResults = returnFlightData.map((flight) => Flight.fromJson(flight)).toList(); // change jason to list
-//       print("check");
-//       // print("out flight: ${outboundResults}");
-//       // print("in flight: ${returnResults}");
-
-//       // Combine outbound and return results into a single list
-//       List<Flight> resultsOut = [];
-//       resultsOut.addAll(outboundResults);
-//       // print("result list: ${results}");
-      
-
-//       // if the bug that one way trip show flight back trip by if one way trip not adding flight back trip in list
-//       List<Flight> resultsIn = [];
-//       if (widget.searchData.selectedDate == null){
-//         resultsIn.addAll(returnResults);
-//       }
-      
-
-//       setState(() {
-//         print("set state");
-//         _searchResults = resultsOut;
-//         _searchResultsReturn = resultsIn;
-//         _isLoading = false; // Set loading to false after processing the API response
-//         print("set state2");
-//       });
-//     } else {
-//       setState(() {
-//         _isLoading = false; // Set loading to false if the API call failed
-//       });
-//       throw Exception('Failed to load flights');
-//     }
-//   } catch (e) {
-//     setState(() {
-//       _isLoading = false; // Set loading to false if an error occurred
-//     });
-//     // check any errors
-//     print('Error: $e');
-//   }
-// }
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar( // header
         title: Text("Flight Search Results"),
+        actions: [
+          // Add the SortingWidget to the AppBar
+          SortingWidget(
+            sortingOptions: ['Default', 'Fastest', 'Cheapest', 'Direct'],
+            selectedOption: _sortingOption,
+            onSortOptionSelected: _sortResults,
+            searchResults: _searchResults,
+            ),
+        ],
+        
       ),
       body: _isLoading 
           ? Center( // if can find the flight
