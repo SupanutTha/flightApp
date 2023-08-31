@@ -71,19 +71,5 @@ class Flight {
     };
   }
 
-//   Duration getDuration(Flight flight){
-//     if (flight.itineraries.length == 1) {
-//       // Only one segment
-//       String carrierCode = segments[0]['carrierCode'];
-//       String flightNumber = segments[0]['number'];
-//       String duration = segments[0]['duration'];
-//       String departureIataCode = segments[0]['departure']['iataCode'];
-//       String arrivalIataCode = segments[0]['arrival']['iataCode'];
-//       String departureTime = segments[0]['departure']['at'];
-//       String arrivalTime = segments[0]['arrival']['at'];
-//   }
-//   else if(flight.itineraries.length == 1){
-
-//   }
  }
 

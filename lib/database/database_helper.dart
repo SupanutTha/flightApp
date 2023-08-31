@@ -182,6 +182,24 @@ Future<List<Airline>> retrieveAirlines() async {
   }
 }
 
+  Future<Airline?> getAirlineByCode(String iata) async {
+    final maps = await _airlineDatabase?.query(
+      'airlines',
+      columns: ['name', 'iata'],
+      where: 'itata = ?',
+      whereArgs: [iata],
+    );
+    if (maps!.isNotEmpty) {
+      return Airline.fromMap(maps.first);
+    }
+    return null;
+  }
+
+  Future<String> getAirlineName(String carrierCode) async {
+  Airline? airline = await getAirlineByCode(carrierCode);
+  return airline?.name ?? "Unknown Airline";
+}
+
 
 }
 
